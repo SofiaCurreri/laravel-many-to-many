@@ -20,6 +20,7 @@ class ProjectSeeder extends Seeder
     {
         //la collection mi diventa un array normale con gli id delle categorie grazie a pluck()
         $types = Type::all()->pluck('id');
+        $types[] = null;
 
         for($i = 0; $i < 40; $i++) {
             $project = new Project;
