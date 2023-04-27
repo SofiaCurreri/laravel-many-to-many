@@ -43,6 +43,14 @@
                 <strong>Contenuto: </strong>
                 {{$project->text}}
             </p>
+
+            <p class="mt-5">
+                <strong>Ultima modifica:</strong> {{$project->updated_at}}
+            </p>
+
+            <p>
+                <strong>Creato il:</strong> {{$project->created_at}}
+            </p>
         </div>
         
     </section>
