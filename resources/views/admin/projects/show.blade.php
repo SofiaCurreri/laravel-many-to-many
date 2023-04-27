@@ -23,7 +23,20 @@
             </figure>
             <p>
                 <strong>Tipo: </strong>
-                <span class="badge rounded-pill" style="background-color:{{$project->type?->color}}">{{$project->type?->label}}</span>
+                @if ($project->type)
+                    {!! $project->type->getPillHTML() !!}
+                @else
+                    Non categorizzato
+                @endif
+            </p>
+
+            <p>
+                <strong>Tecnologie: </strong>
+                @forelse ($project->technologies as $technology)
+                    {!! $technology->getPillHTML() !!}
+                @empty
+                    Nessuna tecnologia associata
+                @endforelse
             </p>
             
             <p>
