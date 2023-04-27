@@ -12,7 +12,7 @@
         <div class="card-body">
             <p>
                 <strong>Tipo: </strong>
-                <span class="badge rounded-pill" style="background-color:{{$type->color}}">{{$type->label}}</span>
+                {!! $type?->getPillHTML() !!}     
             </p>
         </div>
         
