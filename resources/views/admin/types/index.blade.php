@@ -77,7 +77,7 @@
                             <td>{{$type->label}}</td>
                             <td>{{$type->color}}</td>
                             <td>
-                                <span class="badge rounded-pill" style="background-color:{{$type->color}}">{{$type->label}}</span>
+                                {!! $type->getPillHTML() !!}
                             </td>
                             <td>{{$type->created_at}}</td>
                             <td>{{$type->updated_at}}</td>
@@ -96,7 +96,11 @@
                             </td>               
                         </tr>
                     @empty
-                        
+                        <tr>
+                            <td colspan="7">
+                                Nessun risultato
+                            </td>
+                        </tr>
                     @endforelse
                   </tbody>
             </table>
