@@ -65,13 +65,21 @@
                             <label for="technology_id" class="form-label">Tecnologie</label>
                         </div>
                         <div class="col-md-10">
-                            @foreach ($technologies as $technology)
+                            <div class="form-check @error('technologies') is-invalid @enderror p-0">
+                                @foreach ($technologies as $technology)
+    
+                                    {{-- technologies[] perchè così ti salva in un array tutte le technologies selezionate, altrimenti te ne salva solo una --}}
+                                    <input type="checkbox" id="technology-{{$technology->id}}" value="{{$technology->id}}" name="technologies[]" class="form-check-control" @if (in_array($technology->id, old('technologies', $project_technologies ?? []))) checked @endif>
+                                    <label for="technology-{{$technology->id}}">{{$technology->label}}</label> 
+                                    <br>
+                                @endforeach
+                            </div>
 
-                                {{-- technologies[] perchè così ti salva in un array tutte le technologies selezionate, altrimenti te ne salva solo una --}}
-                                <input type="checkbox" id="technology-{{$technology->id}}" value="{{$technology->id}}" name="technologies[]" class="form-check-control" @if (in_array($technology->id, $project_technologies ?? [])) checked @endif>
-                                <label for="technology-{{$technology->id}}">{{$technology->label}}</label> 
-                                <br>
-                            @endforeach
+                            @error('technologies')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                            @enderror
                         </div>
                     </div> 
 
