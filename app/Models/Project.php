@@ -18,6 +18,11 @@ class Project extends Model
         return $this->belongsTo(Type::class);
     }
 
+    //relazione N(projects) a N(technologies)
+    public function technologies() {
+        return $this->belongsToMany(Technology::class);
+    }
+
     //funzione per generare un abstract del text
     public function getAbstract($max=50) {
         return substr($this->text, 0, $max) . "...";
