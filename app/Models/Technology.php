@@ -13,4 +13,10 @@ class Technology extends Model
     public function projects() {
         return $this->belongsToMany(Project::class);
     }
+
+    
+    //funzione per la pill
+    public function getPillHTML() {
+        return '<span class="badge rounded-pill" style="background-color:' . $this->color . '">' . $this->label . '</span>';
+    }
 }
