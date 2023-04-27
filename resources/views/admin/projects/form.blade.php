@@ -62,6 +62,21 @@
 
                     <div class="row mb-3">
                         <div class="col-md-2 text-end">
+                            <label for="technology_id" class="form-label">Tecnologie</label>
+                        </div>
+                        <div class="col-md-10">
+                            @foreach ($technologies as $technology)
+
+                                {{-- technologies[] perchè così ti salva in un array tutte le technologies selezionate, altrimenti te ne salva solo una --}}
+                                <input type="checkbox" id="technology-{{$technology->id}}" value="{{$technology->id}}" name="technologies[]" class="form-check-control" @if (in_array($technology->id, $project_technologies ?? [])) checked @endif>
+                                <label for="technology-{{$technology->id}}">{{$technology->label}}</label> 
+                                <br>
+                            @endforeach
+                        </div>
+                    </div> 
+
+                    <div class="row mb-3">
+                        <div class="col-md-2 text-end">
                             <label for="is_published" class="form-label">Pubblicato</label>
                         </div>
                         <div class="col-md-10">
