@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Type;
 
 use App\Http\Controllers\Controller;
+use App\Models\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -41,8 +42,9 @@ class ProjectController extends Controller
     public function create()
     {
         $project = new Project;
-        $types = Type::orderBy('label')->get();        
-        return view('admin.projects.form', compact('project', 'types'));
+        $types = Type::orderBy('label')->get();   
+        $technologies = Technology::orderBy('label')->get();    
+        return view('admin.projects.form', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -60,7 +62,8 @@ class ProjectController extends Controller
             'text' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg',
             'is_published' => 'boolean',
-            'type_id' => 'nullable|exists:types,id'
+            'type_id' => 'nullable|exists:types,id',
+            'technologies' => 'nullable|exists:technologies,id',
         ], 
         [
             'title.required' => 'Il titolo è obbligatorio',
@@ -73,7 +76,8 @@ class ProjectController extends Controller
             'image.image' => 'Il file caricato deve essere un\'immagine',
             'image.mimes' => 'Le estensioni accettate per l\' immagine sono jpg, png, jpeg',
 
-            'type_id.exists' => 'L\' id della categoria non è valido'
+            'type_id.exists' => 'L\' id della categoria non è valido',
+            'technologies.exists' => 'Le tecnologie selezionate non sono valide'
         ]);
 
         $data = $request->all(); //per non scrivere $request->all() per intero ogni volta
@@ -113,7 +117,9 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::orderBy('label')->get();
-        return view('admin.projects.form', compact('project', 'types'));
+        $technologies = Technology::orderBy('label')->get(); 
+        $project_technologies = $project->technologies->pluck('id')->toArray();   
+        return view('admin.projects.form', compact('project', 'types', 'technologies', 'project_technologies'));
     }
 
     /**
@@ -131,7 +137,8 @@ class ProjectController extends Controller
             'text' => 'required|string',
             'image' => 'nullable|image|mimes:jpg,png,jpeg',
             'is_published' => 'boolean',
-            'type_id' => 'nullable|exists:types,id'
+            'type_id' => 'nullable|exists:types,id',
+            'technologies' => 'nullable|exists:technologies,id'
         ], 
         [
             'title.required' => 'Il titolo è obbligatorio',
@@ -144,7 +151,8 @@ class ProjectController extends Controller
             'image.image' => 'Il file caricato deve essere un\'immagine',
             'image.mimes' => 'Le estensioni accettate per l\' immagine sono jpg, png, jpeg',
 
-            'type_id.exists' => 'L\' id della categoria non è valido'
+            'type_id.exists' => 'L\' id della categoria non è valido',
+            'technologies.exists' => 'Le tecnologie selezionate non sono valide'
         ]);
 
         $data = $request->all(); //per non scrivere $request->all() per intero ogni volta
@@ -165,10 +173,12 @@ class ProjectController extends Controller
         
         //update() = fill() + save()
         $project->update($data);
+        if(Arr::exists($data, "technologies")) $project->technologies()->sync($data["technologies"]);
+        else $project->technologies()->detach();
 
         //return to_route = redirect
         return to_route('admin.projects.show', $project)
-            ->with('message_content', 'Post modificato con successo');
+            ->with('message_content', "Post $project->id modificato con successo");
     }
 
     /**
