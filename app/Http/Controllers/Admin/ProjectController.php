@@ -93,6 +93,8 @@ class ProjectController extends Controller
         // $project->image = $path; METODO 1
         $project->save();
 
+        if(Arr::exists($data, "technologies")) $project->technologies()->attach($data["technologies"]);
+
         return to_route('admin.projects.show',$project)
             ->with('message_content', 'Post creato con successo');
     }
