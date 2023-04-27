@@ -230,6 +230,8 @@ class ProjectController extends Controller
 
         //quando cancelliamo progetto dobbiamo cancellare anche relativa immagine
         if($project->image) Storage::delete($project->image);
+
+        $project->technologies()->detach();
         
         $project->forceDelete();
         
